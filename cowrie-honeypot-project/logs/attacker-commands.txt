@@ -1,7 +1,22 @@
-ssh root@<honeypot-ip>
-uname
+ssh root@192.168.1.87
+root
+kali
+
+uname -a
 whoami
-cat /etc/*release
+id
+pwd
 ls -la
+
+cat /etc/os-release
+cat /etc/*release
+cat /proc/cpuinfo
+cat /proc/meminfo
+
+echo test
+ls /
+
 cat ~/.bash_history
+history
+
 exit
