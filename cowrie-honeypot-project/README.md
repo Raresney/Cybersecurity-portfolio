@@ -19,7 +19,7 @@ The honeypot captures attacker behavior in real time, including:
 
 - The project mimics the workflow of a SOC Analyst, focusing on threat detection, behavioral analysis, and log interpretation.
 
-1. Environment Setup
+#1. Environment Setup
 
 OS: Kali Linux (VirtualBox)
 Network Mode: Bridged Adapter
