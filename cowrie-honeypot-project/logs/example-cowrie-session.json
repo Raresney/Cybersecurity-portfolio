@@ -1,1 +1,42 @@
-{"eventid":"cowrie.command.input"}
+[
+  {
+    "eventid": "cowrie.session.connect",
+    "src_ip": "192.168.0.50",
+    "dst_port": 22,
+    "protocol": "ssh",
+    "timestamp": "2025-01-01T10:00:00Z",
+    "session": "abc123"
+  },
+  {
+    "eventid": "cowrie.login.failed",
+    "username": "root",
+    "password": "123456",
+    "src_ip": "192.168.0.50",
+    "timestamp": "2025-01-01T10:00:05Z",
+    "session": "abc123"
+  },
+  {
+    "eventid": "cowrie.login.success",
+    "username": "root",
+    "password": "kali",
+    "src_ip": "192.168.0.50",
+    "timestamp": "2025-01-01T10:00:10Z",
+    "session": "abc123"
+  },
+  {
+    "eventid": "cowrie.command.input",
+    "input": "uname",
+    "src_ip": "192.168.0.50",
+    "timestamp": "2025-01-01T10:00:12Z",
+    "session": "abc123",
+    "protocol": "ssh"
+  },
+  {
+    "eventid": "cowrie.command.input",
+    "input": "cat /etc/*release",
+    "src_ip": "192.168.0.50",
+    "timestamp": "2025-01-01T10:00:15Z",
+    "session": "abc123",
+    "protocol": "ssh"
+  }
+]
