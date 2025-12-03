@@ -1,1 +1,12 @@
-[TTY SESSION]
+[TTY SESSION REPLAY EXAMPLE]
+
+root@svr04:~# uname
+Linux
+root@svr04:~# whoami
+root
+root@svr04:~# cat /etc/*release
+Debian GNU/Linux 12 (bookworm)
+root@svr04:~# ls
+bin  etc  home  tmp  var
+root@svr04:~# exit
+Connection closed.
