@@ -1,4 +1,4 @@
-# Cybersecurity-portofolio
+# Cybersecurity-portfolio
 This is my cybersecurity portfolio. Here I collect notes, labs, practical exercises and my hands-on practice (TryHackMe and other labs). I update it as I learn and improve.
 
 ## Professional statement
