@@ -3,7 +3,7 @@ Simple Website Security Check Tool
 
 A lightweight security scanner for websites, ideal for small projects or learning purposes.
 
-Copyright (c) 2026 YourName - https://github.com/YourGitHub
+Copyright (c) 2026 Bighiu Rares - https://github.com/YourGitHub
 """
 
 import argparse
