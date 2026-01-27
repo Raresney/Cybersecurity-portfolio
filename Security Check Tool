@@ -1,8 +1,7 @@
-"""
-Simple Website Security Check Tool using python.
+
+#Simple Website Security Check Tool using python.
 
 Copyright (c) 2026 Bighiu Rares - https://github.com/Raresney
-"""
 
 import argparse
 import requests
