@@ -1,207 +1,191 @@
-# SSH Honeypot Monitoring & Attacker Behavior Analysis – Cowrie Project
+# 🍯 SSH Honeypot – Cowrie Project
 
-This project demonstrates how to deploy, configure, and monitor an SSH honeypot using Cowrie on a Kali Linux virtual machine.
-The honeypot captures attacker behavior in real time, including:
+Deployment and monitoring of an SSH honeypot using **Cowrie** on a Kali Linux VM.  
+The honeypot captures real attacker behavior — login attempts, executed commands, session replays, and potential malware download attempts — mimicking a SOC Analyst workflow focused on threat detection and behavioral analysis.
 
-- SSH login attempts
+> Copyright (c) 2026 Bighiu Rares — [github.com/Raresney](https://github.com/Raresney)
 
-- executed commands
+---
 
-- system enumeration attempts
+## 📋 What Gets Captured
 
-- failed commands
-
-- session replay (TTY logs)
-
+- SSH login attempts & brute-force patterns
+- Executed commands and system enumeration
 - IP address, timestamp, session ID
+- TTY session replay (keystroke-by-keystroke)
+- Potential malware download attempts
 
-- potential malware download attempts
+---
 
-- The project mimics the workflow of a SOC Analyst, focusing on threat detection, behavioral analysis, and log interpretation.
+## ⚙️ Environment
 
-## 1. Environment Setup
+| Component      | Details                            |
+| -------------- | ---------------------------------- |
+| OS             | Kali Linux (VirtualBox)            |
+| Network        | Bridged Adapter                    |
+| Honeypot       | Cowrie (SSH mode)                  |
+| Listening Port | 22                                 |
+| Python         | Virtual environment (`cowrie-env`) |
 
-- OS: Kali Linux (VirtualBox)
+---
 
-- Network Mode: Bridged Adapter
+## 🚀 Setup
 
-- Honeypot: Cowrie (SSH mode)
+### 1. Install Cowrie
 
-- Listening Port: 22
+```bash
+git clone https://github.com/cowrie/cowrie.git
+cd cowrie
+python3 -m venv cowrie-env
+source cowrie-env/bin/activate
+pip install --upgrade pip
+pip install -e .
+```
 
-- Python: Virtual environment (cowrie-env)
+### 2. Configure Port 22
 
-## 2. Installing Cowrie
+Edit `etc/cowrie.cfg`:
 
-```git clone https://github.com/cowrie/cowrie.git```
+```ini
+# Change this:
+listen_endpoints = tcp:2222:interface=0.0.0.0
 
-```cd cowrie```
+# To this:
+listen_endpoints = tcp:22:interface=0.0.0.0
+```
 
-```python3 -m venv cowrie-env```
+Allow binding to privileged port 22:
 
-```source cowrie-env/bin/activate```
+```bash
+sudo touch /etc/authbind/byport/22
+sudo chown <username> /etc/authbind/byport/22
+sudo chmod 755 /etc/authbind/byport/22
+```
 
-```pip install --upgrade pip```
+### 3. Start the Honeypot
 
-```pip install -e ```
+```bash
+source cowrie-env/bin/activate
+cowrie start
+cowrie status
 
-## 3. Configuring Cowrie to Listen on Port 22
+# Verify port binding
+sudo ss -tulnp | grep 22
+```
 
-Edit Cowrie’s configuration file:
+Expected output:
 
-```nano etc/cowrie.cfg```
+```
+tcp   LISTEN   0   50   0.0.0.0:22   ...
+```
 
-Change this line:
+---
 
-```listen_endpoints = tcp:2222:interface=0.0.0.0```
+## 🔍 Monitoring
 
-To:
+### Real-Time JSON Log (commands, IPs, timestamps)
 
-```listen_endpoints = tcp:22:interface=0.0.0.0```
-
-Allow Python to bind to privileged port 22:
-
-```sudo touch /etc/authbind/byport/22```
-
-```sudo chown <username> /etc/authbind/byport/22```
-
-```sudo chmod 755 /etc/authbind/byport/22```
-
-## 4. Starting the Honeypot
-
-``` source cowrie-env/bin/activate ```
-
-```cowrie start```
-
-Check status:
-
-```cowrie status```
-
-Verify port binding:
-
-```sudo ss -tulnp | grep 22```
-
-Expected:
-
-```tcp   LISTEN   0   50   0.0.0.0:22   ... ```
-
-## 5. Attacker Simulation (from another device)
-
-From a phone or another device on the same network (using Termux/Termius):
-
-```ssh root@<honeypot-ip>```
-
-Cowrie accepts any password and drops the attacker into a simulated server:
-
-```root@svr04:~#```
-
-Every command typed is logged.
-
-## 6. Real-Time Log Monitoring
-JSON Log (attacker commands, IP, timestamps)
-
-```tail -f var/log/cowrie/cowrie.json```
+```bash
+tail -f var/log/cowrie/cowrie.json
+```
 
 Example entry:
-{"eventid":"cowrie.command.input","input":"uname","session":"abc123","protocol":"ssh"}
 
-Standard Log:
+```json
+{
+  "eventid": "cowrie.command.input",
+  "input": "uname",
+  "session": "abc123",
+  "protocol": "ssh"
+}
+```
 
- ```tail -f var/log/cowrie/cowrie.log ```
+### Standard Log
 
-## 7. TTY Session Replay
+```bash
+tail -f var/log/cowrie/cowrie.log
+```
 
-Cowrie records full terminal sessions.
+### TTY Session Replay
 
-Play them back:
+```bash
 cowrie-tty-playback var/lib/cowrie/tty/<session-id>
-This replays exactly what the attacker typed, keystroke by keystroke.
+```
 
-## 8. Examples of Captured Behavior
+Replays exactly what the attacker typed, keystroke by keystroke.
 
-- System fingerprinting
+---
 
-- Attempts to read system info (cat /etc/*release, uname)
+## 🧪 Attacker Simulation
 
-- Directory enumeration
+From another device on the same network (Termux / Termius):
 
-- Attempts to view history
+```bash
+ssh root@<honeypot-ip>
+```
 
-- Incorrect POSIX syntax (typical for automated botnet scripts)
+Cowrie accepts any password and drops the attacker into a fake shell:
 
-- Rapid session open/close
+```
+root@svr04:~#
+```
 
-- Brute-force login attempts
+Every command typed is logged silently.
 
-- Example logs can be stored in the /logs folder of this repository.
+---
 
-## 9. SOC-Style Analysis
+## 📊 Captured Behavior Examples
 
-- This honeypot provides insight into:
+| Behavior              | Description                                       |
+| --------------------- | ------------------------------------------------- |
+| System fingerprinting | `uname`, `cat /etc/*release`                      |
+| Directory enumeration | `ls`, `pwd`, `find`                               |
+| History inspection    | `cat ~/.bash_history`                             |
+| Botnet patterns       | Incorrect POSIX syntax, rapid open/close sessions |
+| Brute-force           | Multiple login attempts with common credentials   |
 
-- attacker tactics and behavior
+---
 
-- SSH enumeration techniques
+## 🗂️ Repository Structure
 
-- login attempts and credential patterns
-
-- command sequences
-
-- how bots behave once landing on a system
-
-- potential malware download attempts
-
-This setup is excellent for studying attacker behavior and practicing incident analysis.
-
-## 10. Skills Demonstrated
-
-- Honeypot deployment (Cowrie)
-
-- Linux system administration
-
-- Virtualization & networking (bridged mode)
-
-- Monitoring SSH traffic
-
-- JSON log analysis
-
-- TTY session analysis
-
-- Threat behavior profiling
-
-- Incident investigation workflow
-
-- Understanding indicators of compromise (IOCs)
-
-## 11. Repository Structure
-
-```.
+```
+cowrie-honeypot-project/
 ├── logs/
 │   ├── example-cowrie-session.json
 │   ├── attacker-commands.txt
 │   └── tty-session.txt
-│
 ├── screenshots/
 │   ├── port22-listening.png
 │   ├── phone-ssh-connection.png
 │   └── cowrie-json-log.png
-│
 └── README.md
 ```
 
-## 12. Future Improvements
+---
 
-- Integrate with Splunk / ELK (SIEM)
+## 🛠️ Skills Demonstrated
 
+- Honeypot deployment (Cowrie)
+- Linux system administration
+- Virtualization & networking (bridged mode)
+- JSON log analysis & TTY session replay
+- Threat behavior profiling
+- SOC incident investigation workflow
+- Indicators of Compromise (IOCs) identification
+
+---
+
+## 🔮 Future Improvements
+
+- Integrate with Splunk / ELK Stack (SIEM)
 - GeoIP lookup for attacker IPs
+- Automated alerting via webhooks
+- Additional honeypots (HTTP, FTP, SMB)
+- WAN exposure with strict network isolation
 
-- Automated alerting using webhooks
+---
 
-- Deploy additional honeypots (HTTP, FTP, SMB)
+## ⚠️ Disclaimer
 
-- Expose honeypot to WAN for global attacks (with strict isolation)
-
-## 13. Conclusion
-
-This project replicates a real-world attacker interaction within a controlled environment using Cowrie. It is ideal for learning cybersecurity, SOC operations, and attacker behavior analysis.
-
+This project is conducted in a **controlled, isolated environment** for educational purposes only.  
+Do not deploy honeypots on networks you do not own or without explicit authorization.
