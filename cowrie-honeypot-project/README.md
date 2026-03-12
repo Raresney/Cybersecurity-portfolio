@@ -1,74 +1,163 @@
-# 🦠 Automated Malware Analysis Toolkit
+# 🍯 SSH Honeypot – Cowrie Project
 
-A professional-grade malware analysis lab environment designed for safe execution and behavioral study of suspicious binaries — combining static analysis, dynamic network monitoring, and automated orchestration in a single workflow.
+Deployment and monitoring of an SSH honeypot using **Cowrie** on a Kali Linux VM.  
+The honeypot captures real attacker behavior — login attempts, executed commands, session replays, and potential malware download attempts — mimicking a SOC Analyst workflow focused on threat detection and behavioral analysis.
 
 > Copyright (c) 2026 Bighiu Rares — [github.com/Raresney](https://github.com/Raresney)
 
 ---
 
-## 📋 Features
+## 📋 What Gets Captured
 
-| Module                        | Description                                                        |
-| ----------------------------- | ------------------------------------------------------------------ |
-| 🔍 Static Analysis            | Automated MD5/SHA256 hashing and IoC extraction                    |
-| 🌐 Dynamic Network Monitoring | Real-time packet inspection (DNS, TCP, UDP) to detect C2 callbacks |
-| ⚙️ Automated Orchestration    | Bash-based workflow — full analysis with a single command          |
+- SSH login attempts & brute-force patterns
+- Executed commands and system enumeration
+- IP address, timestamp, session ID
+- TTY session replay (keystroke-by-keystroke)
+- Potential malware download attempts
 
 ---
 
-## ⚙️ Requirements
+## ⚙️ Environment
 
-- Python 3.7+
-- `scapy`
-- Bash (Linux / WSL)
+| Component      | Details                            |
+| -------------- | ---------------------------------- |
+| OS             | Kali Linux (VirtualBox)            |
+| Network        | Bridged Adapter                    |
+| Honeypot       | Cowrie (SSH mode)                  |
+| Listening Port | 22                                 |
+| Python         | Virtual environment (`cowrie-env`) |
+
+---
+
+## 🚀 Setup
+
+### 1. Install Cowrie
 
 ```bash
-pip install scapy
+git clone https://github.com/cowrie/cowrie.git
+cd cowrie
+python3 -m venv cowrie-env
+source cowrie-env/bin/activate
+pip install --upgrade pip
+pip install -e .
 ```
 
----
+### 2. Configure Port 22
 
-## 🚀 Usage
+Edit `etc/cowrie.cfg`:
+
+```ini
+# Change this:
+listen_endpoints = tcp:2222:interface=0.0.0.0
+
+# To this:
+listen_endpoints = tcp:22:interface=0.0.0.0
+```
+
+Allow binding to privileged port 22:
 
 ```bash
-# Set permissions
-chmod +x run_lab.sh
+sudo touch /etc/authbind/byport/22
+sudo chown <username> /etc/authbind/byport/22
+sudo chmod 755 /etc/authbind/byport/22
+```
 
-# Run full analysis on a sample
-./run_lab.sh suspicious_sample.exe
+### 3. Start the Honeypot
 
-# Review generated report
-cat analysis_log_*.txt
+```bash
+source cowrie-env/bin/activate
+cowrie start
+cowrie status
+
+# Verify port binding
+sudo ss -tulnp | grep 22
+```
+
+Expected output:
+
+```
+tcp   LISTEN   0   50   0.0.0.0:22   ...
 ```
 
 ---
 
-## 📊 Output
+## 🔍 Monitoring
 
-Each run generates a timestamped log file:
+### Real-Time JSON Log (commands, IPs, timestamps)
+
+```bash
+tail -f var/log/cowrie/cowrie.json
+```
+
+Example entry:
+
+```json
+{
+  "eventid": "cowrie.command.input",
+  "input": "uname",
+  "session": "abc123",
+  "protocol": "ssh"
+}
+```
+
+### Standard Log
+
+```bash
+tail -f var/log/cowrie/cowrie.log
+```
+
+### TTY Session Replay
+
+```bash
+cowrie-tty-playback var/lib/cowrie/tty/<session-id>
+```
+
+Replays exactly what the attacker typed, keystroke by keystroke.
+
+---
+
+## 🧪 Attacker Simulation
+
+From another device on the same network (Termux / Termius):
+
+```bash
+ssh root@<honeypot-ip>
+```
+
+Cowrie accepts any password and drops the attacker into a fake shell:
 
 ```
-analysis_log_2026-03-12_14-32-01.txt
+root@svr04:~#
 ```
 
-Containing:
+Every command typed is logged silently.
 
-- File hashes (MD5, SHA256)
-- Extracted IoCs
-- DNS queries, TCP/UDP connections
-- Potential C2 callback patterns
+---
+
+## 📊 Captured Behavior Examples
+
+| Behavior              | Description                                       |
+| --------------------- | ------------------------------------------------- |
+| System fingerprinting | `uname`, `cat /etc/*release`                      |
+| Directory enumeration | `ls`, `pwd`, `find`                               |
+| History inspection    | `cat ~/.bash_history`                             |
+| Botnet patterns       | Incorrect POSIX syntax, rapid open/close sessions |
+| Brute-force           | Multiple login attempts with common credentials   |
 
 ---
 
 ## 🗂️ Repository Structure
 
 ```
-Malware-Lab/
-├── run_lab.sh              # Main orchestration script
-├── static_analysis.py      # Hashing & IoC extraction
-├── network_monitor.py      # Scapy-based packet inspection
-├── samples/                # Place suspicious binaries here
-├── logs/                   # Generated analysis reports
+cowrie-honeypot-project/
+├── logs/
+│   ├── example-cowrie-session.json
+│   ├── attacker-commands.txt
+│   └── tty-session.txt
+├── screenshots/
+│   ├── port22-listening.png
+│   ├── phone-ssh-connection.png
+│   └── cowrie-json-log.png
 └── README.md
 ```
 
@@ -76,16 +165,27 @@ Malware-Lab/
 
 ## 🛠️ Skills Demonstrated
 
-- Static malware analysis (hashing, IoC extraction)
-- Network traffic analysis with Scapy
-- C2 callback pattern detection
-- Digital forensics — structured, timestamped evidence capture
-- Threat intelligence & malware behavior profiling
-- Bash scripting & workflow automation
+- Honeypot deployment (Cowrie)
+- Linux system administration
+- Virtualization & networking (bridged mode)
+- JSON log analysis & TTY session replay
+- Threat behavior profiling
+- SOC incident investigation workflow
+- Indicators of Compromise (IOCs) identification
+
+---
+
+## 🔮 Future Improvements
+
+- Integrate with Splunk / ELK Stack (SIEM)
+- GeoIP lookup for attacker IPs
+- Automated alerting via webhooks
+- Additional honeypots (HTTP, FTP, SMB)
+- WAN exposure with strict network isolation
 
 ---
 
 ## ⚠️ Disclaimer
 
-This toolkit is designed for use in **isolated, controlled lab environments only**.  
-Never run malware samples on a production machine or network. Always use a dedicated VM with network isolation.
+This project is conducted in a **controlled, isolated environment** for educational purposes only.  
+Do not deploy honeypots on networks you do not own or without explicit authorization.
