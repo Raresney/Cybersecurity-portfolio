@@ -1,0 +1,22 @@
+ssh root@xxx.xxx.x.xx
+root
+kali
+
+uname -a
+whoami
+id
+pwd
+ls -la
+
+cat /etc/os-release
+cat /etc/*release
+cat /proc/cpuinfo
+cat /proc/meminfo
+
+echo test
+ls /
+
+cat ~/.bash_history
+history
+
+exit
