@@ -63,3 +63,4 @@ Write-ups and notes: [./TryHackMe](./TryHackMe/)
 
 > All projects and labs in this portfolio are conducted in controlled environments for educational purposes only.
 ## Updates
+## Notes
