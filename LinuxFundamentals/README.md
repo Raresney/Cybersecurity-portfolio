@@ -4,95 +4,95 @@ Quick reference for essential Linux commands used in cybersecurity and system ad
 
 ---
 
-## Navigare & fisiere
+## Navigation & Files
 
-| Comanda | Descriere |
-| ------- | --------- |
-| `pwd` | Afiseaza directorul curent |
-| `ls -la` | Listeaza tot: fisiere ascunse, permisiuni, dimensiuni |
-| `cd /path` | Schimba directorul de lucru |
-| `mkdir -p dir/sub` | Creeaza directoare inclusiv nested |
-| `cp -r src dest` | Copiaza fisiere/directoare recursiv |
-| `mv src dest` | Muta sau redenumeste fisiere |
-| `rm -rf target` | Sterge fortat fisiere/directoare (fara confirmare!) |
-| `find / -name "*.log"` | Cauta fisiere dupa nume, tip, data etc. |
-| `locate filename` | Cauta rapid din index (mai rapid ca find) |
-| `tree` | Afiseaza structura de directoare vizual |
+| Command | Description |
+| ------- | ----------- |
+| `pwd` | Print current working directory |
+| `ls -la` | List all files including hidden, permissions, sizes |
+| `cd /path` | Change working directory |
+| `mkdir -p dir/sub` | Create directories including nested ones |
+| `cp -r src dest` | Copy files/directories recursively |
+| `mv src dest` | Move or rename files |
+| `rm -rf target` | Force delete files/directories (no confirmation!) |
+| `find / -name "*.log"` | Search files by name, type, date, etc. |
+| `locate filename` | Quick search from index (faster than find) |
+| `tree` | Display directory structure visually |
 
-## Citit & editat fisiere
+## Reading & Editing Files
 
-| Comanda | Descriere |
-| ------- | --------- |
-| `cat file` | Afiseaza continutul complet al fisierului |
-| `less file` | Navigheaza prin fisier (scroll sus/jos) |
-| `head -n 20 file` | Primele N linii din fisier |
-| `tail -f file` | Urmareste live sfarsitul fisierului (logs) |
-| `nano file` | Editor simplu, rapid, intuitiv |
-| `vim file` | Editor avansat (curba de invatare, dar puternic) |
-| `grep -r "text" /path` | Cauta text recursiv in fisiere |
-| `wc -l file` | Numara liniile dintr-un fisier |
-| `diff file1 file2` | Arata diferentele intre doua fisiere |
+| Command | Description |
+| ------- | ----------- |
+| `cat file` | Display full file contents |
+| `less file` | Navigate through a file (scroll up/down) |
+| `head -n 20 file` | First N lines of a file |
+| `tail -f file` | Follow the end of a file live (logs) |
+| `nano file` | Simple, fast, intuitive editor |
+| `vim file` | Advanced editor (steep learning curve, but powerful) |
+| `grep -r "text" /path` | Search text recursively in files |
+| `wc -l file` | Count lines in a file |
+| `diff file1 file2` | Show differences between two files |
 
-## Permisiuni & ownership
+## Permissions & Ownership
 
-| Comanda | Descriere |
-| ------- | --------- |
-| `chmod 755 file` | Seteaza permisiuni (rwx r-x r-x) |
-| `chown user:group file` | Schimba proprietarul fisierului |
-| `sudo command` | Ruleaza comanda ca root (superuser) |
+| Command | Description |
+| ------- | ----------- |
+| `chmod 755 file` | Set permissions (rwx r-x r-x) |
+| `chown user:group file` | Change file owner |
+| `sudo command` | Run command as root (superuser) |
 
-## Procese & sistem
+## Processes & System
 
-| Comanda | Descriere |
-| ------- | --------- |
-| `ps aux` | Listeaza toate procesele active |
-| `top` / `htop` | Monitor live CPU, RAM, procese |
-| `kill -9 PID` | Omoara fortat un proces dupa PID |
-| `systemctl start/stop svc` | Porneste/opreste un serviciu systemd |
-| `systemctl status svc` | Verifica starea unui serviciu |
-| `df -h` | Spatiu liber pe disk (human-readable) |
-| `du -sh *` | Dimensiunea fiecarui director/fisier |
-| `free -h` | Memorie RAM: totala, folosita, libera |
-| `uptime` | De cat timp e pornit sistemul + load |
+| Command | Description |
+| ------- | ----------- |
+| `ps aux` | List all active processes |
+| `top` / `htop` | Live CPU, RAM, process monitor |
+| `kill -9 PID` | Force kill a process by PID |
+| `systemctl start/stop svc` | Start/stop a systemd service |
+| `systemctl status svc` | Check service status |
+| `df -h` | Free disk space (human-readable) |
+| `du -sh *` | Size of each directory/file |
+| `free -h` | RAM: total, used, free |
+| `uptime` | System uptime + load average |
 
-## Retea
+## Networking
 
-| Comanda | Descriere |
-| ------- | --------- |
-| `ip a` / `ifconfig` | Afiseaza adresele IP ale interfetelor |
-| `ping host` | Testeaza conectivitatea la un host |
-| `curl URL` | Face request HTTP (testare API, download) |
-| `wget URL` | Descarca fisiere de pe web |
-| `ss -tulnp` | Porturi deschise si ce le asculta |
-| `ssh user@host` | Conectare remota securizata |
-| `scp file user@host:/p` | Copiaza fisiere intre masini via SSH |
+| Command | Description |
+| ------- | ----------- |
+| `ip a` / `ifconfig` | Display interface IP addresses |
+| `ping host` | Test connectivity to a host |
+| `curl URL` | Make HTTP request (API testing, download) |
+| `wget URL` | Download files from the web |
+| `ss -tulnp` | Open ports and listening services |
+| `ssh user@host` | Secure remote connection |
+| `scp file user@host:/p` | Copy files between machines via SSH |
 
-## Piping & redirectare
+## Piping & Redirection
 
-| Comanda | Descriere |
-| ------- | --------- |
-| `cmd1 \| cmd2` | Trimite output-ul lui cmd1 ca input la cmd2 |
-| `cmd > file` | Scrie output in fisier (suprascrie) |
-| `cmd >> file` | Adauga output la sfarsitul fisierului |
-| `cmd 2>&1` | Redirectioneaza si erorile impreuna cu output |
+| Command | Description |
+| ------- | ----------- |
+| `cmd1 \| cmd2` | Pipe output of cmd1 as input to cmd2 |
+| `cmd > file` | Write output to file (overwrite) |
+| `cmd >> file` | Append output to end of file |
+| `cmd 2>&1` | Redirect errors together with output |
 
-## Arhive & pachete
+## Archives & Packages
 
-| Comanda | Descriere |
-| ------- | --------- |
-| `tar -czf a.tar.gz dir/` | Comprima un director in arhiva .tar.gz |
-| `tar -xzf a.tar.gz` | Extrage o arhiva .tar.gz |
-| `apt update && upgrade` | Actualizeaza lista de pachete + upgrade |
-| `apt install pachet` | Instaleaza un pachet (Debian/Ubuntu) |
-| `dnf install pachet` | Instaleaza un pachet (Fedora/RHEL) |
+| Command | Description |
+| ------- | ----------- |
+| `tar -czf a.tar.gz dir/` | Compress a directory into .tar.gz archive |
+| `tar -xzf a.tar.gz` | Extract a .tar.gz archive |
+| `apt update && upgrade` | Update package list + upgrade |
+| `apt install package` | Install a package (Debian/Ubuntu) |
+| `dnf install package` | Install a package (Fedora/RHEL) |
 
-## Combo-uri utile
+## Useful Combos
 
-| Comanda | Descriere |
-| ------- | --------- |
-| `history \| grep "x"` | Cauta in comenzile rulate anterior |
-| `xargs` | Transforma output in argumente pt alta comanda |
-| `sed 's/old/new/g' file` | Inlocuieste text in fisiere (find & replace) |
-| `awk '{print $2}' file` | Extrage coloane specifice din text |
-| `crontab -e` | Editeaza taskuri programate (cron jobs) |
-| `ln -s target link` | Creeaza un symlink (scurtatura) |
+| Command | Description |
+| ------- | ----------- |
+| `history \| grep "x"` | Search previously run commands |
+| `xargs` | Transform output into arguments for another command |
+| `sed 's/old/new/g' file` | Replace text in files (find & replace) |
+| `awk '{print $2}' file` | Extract specific columns from text |
+| `crontab -e` | Edit scheduled tasks (cron jobs) |
+| `ln -s target link` | Create a symlink (shortcut) |
