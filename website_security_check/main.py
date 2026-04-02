@@ -9,9 +9,31 @@ import requests
 import json
 import os
 import logging
+import socket
+import ipaddress
 from urllib.parse import urlparse
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
+
+def is_safe_url(url):
+    """Validate URL to prevent SSRF attacks"""
+    try:
+        parsed = urlparse(url)
+        hostname = parsed.hostname
+        if not hostname:
+            return False
+        # Resolve hostname to IP and check if it's private
+        ip = socket.gethostbyname(hostname)
+        ip_obj = ipaddress.ip_address(ip)
+        if ip_obj.is_private or ip_obj.is_loopback or ip_obj.is_reserved:
+            return False
+        # Block cloud metadata endpoints
+        if ip == '169.254.169.254':
+            return False
+        return True
+    except (socket.gaierror, ValueError):
+        return False
 
 
 def has_https(url):
@@ -136,6 +158,11 @@ def main():
 
     url = args.url if args.url.startswith("http") else "https://" + args.url
     domain_safe = urlparse(url).netloc.replace(".", "_")
+
+    if not is_safe_url(url):
+        logging.error("URL blocked: target resolves to a private/reserved IP address.")
+        return
+
     logging.info("Scanning: %s", url)
 
     results = {
