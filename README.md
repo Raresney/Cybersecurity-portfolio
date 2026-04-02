@@ -12,7 +12,6 @@ This repository documents my learning journey, practical labs, and tools I've bu
 | [Website Security Check](./website_security_check/) | Python CLI tool that scans websites for HTTPS, missing security headers, WAF, CMS, and directory listing exposure |
 | [Cowrie Honeypot](./cowrie-honeypot-project/) | SSH/Telnet honeypot deployment to capture and analyze attacker behavior |
 | [Malware Lab](./Malware-Lab/) | Controlled malware analysis environment — static and dynamic analysis of malicious samples |
-| [Linux Fundamentals](./LinuxFundamentals/) | Linux commands reference — essential commands for cybersecurity and sysadmin |
 
 ---
 
