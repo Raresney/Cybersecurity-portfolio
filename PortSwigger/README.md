@@ -8,12 +8,17 @@ Personal notes and lab solutions from PortSwigger's Web Security Academy.
 
 | Topic | Labs Completed | Level |
 | --- | --- | --- |
+| [Path Traversal](./labs/Path_Traversal.md) | 3/3 | Apprentice |
 | [Access Control](./labs/Access_Control.md) | 12/12 | Apprentice |
-| [Path Traversal](./labs/Path_Traversal.md) | — | Apprentice |
 
 ---
 
 ## Topics Covered
+
+### Path Traversal
+- What is path traversal?
+- Reading arbitrary files via path traversal
+- Lab: File path traversal, simple case
 
 ### Access Control
 - What is access control?
@@ -26,9 +31,6 @@ Personal notes and lab solutions from PortSwigger's Web Security Academy.
 - User ID controlled by request parameter with unpredictable user IDs
 - Horizontal to vertical privilege escalation
 - User ID controlled by request parameter with password disclosure
-
-### Path Traversal
-- Notes in progress
 
 ---
 
