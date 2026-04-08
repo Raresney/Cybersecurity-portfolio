@@ -4,33 +4,23 @@ Personal notes and lab solutions from PortSwigger's Web Security Academy.
 
 ---
 
-## Progress
+## Learning Paths
 
-| Topic | Labs Completed | Level |
+### Server-side vulnerabilities `APPRENTICE`
+
+Common server-side vulnerabilities — perfect for getting an overview of the kinds of vulnerabilities that exist and how an attacker might identify and exploit them in real-world systems.
+
+**52/52 labs completed**
+
+| Topic | Labs | Notes |
 | --- | --- | --- |
-| [Path Traversal](./labs/Path_Traversal.md) | 3/3 | Apprentice |
-| [Access Control](./labs/Access_Control.md) | 12/12 | Apprentice |
-
----
-
-## Topics Covered
-
-### Path Traversal
-- What is path traversal?
-- Reading arbitrary files via path traversal
-- Lab: File path traversal, simple case
-
-### Access Control
-- What is access control?
-- Vertical privilege escalation
-- Unprotected functionality
-- Unprotected admin functionality with unpredictable URL
-- Parameter-based access control methods
-- User role controlled by request parameter
-- Horizontal privilege escalation
-- User ID controlled by request parameter with unpredictable user IDs
-- Horizontal to vertical privilege escalation
-- User ID controlled by request parameter with password disclosure
+| [SQL Injection](./labs/SQL_Injection.md) | 7/7 | WHERE clause, login bypass, UNION attacks |
+| [Authentication](./labs/Authentication.md) | 10/10 | Brute-force, 2FA bypass, password reset |
+| [Path Traversal](./labs/Path_Traversal.md) | 3/3 | Arbitrary file read, filter bypass |
+| [OS Command Injection](./labs/OS_Command_Injection.md) | 5/5 | Simple & blind injection, OOB exfiltration |
+| [Access Control](./labs/Access_Control.md) | 12/12 | Vertical, horizontal & privilege escalation |
+| [File Upload](./labs/File_Upload.md) | 9/9 | Web shells, extension bypass, race conditions |
+| [SSRF](./labs/SSRF.md) | 6/6 | Internal access, filter bypass, blind SSRF |
 
 ---
 
@@ -40,7 +30,12 @@ Personal notes and lab solutions from PortSwigger's Web Security Academy.
 PortSwigger/
 ├── labs/
 │   ├── Access_Control.md
-│   └── Path_Traversal.md
+│   ├── Authentication.md
+│   ├── File_Upload.md
+│   ├── OS_Command_Injection.md
+│   ├── Path_Traversal.md
+│   ├── SQL_Injection.md
+│   └── SSRF.md
 └── README.md
 ```
 
